@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--mainColor: #2593F7;
+	--borderColor: #D9D9D9;
+	--grayColor: #D9D9D9;
+	--activeColor: #E8F4FF;
+	--shadowColor: #0000000A;
+	--grayText: #888888;
+	--activeRow: #f6f8fe;
+	--black: #000000;
+	--red: #F46A6A;
+}
+
+.black-link {
+	color: black;
+	text-decoration: none;
+}
+
+.blue-link {
+	color: var(--mainColor);
+	text-decoration: none;
+}
+
+.main-section {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #F3F3F4;
+	height: 100vh;
+}
+
+.main-section .all-box-section {
+	width: 966px;
+	height: 500px;
+	background-color: #fff;
+	margin: 40px auto;
+	border-radius: 25px;
+	position: relative;
+}
+
+.email-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.content-container {
+	font-family: 'Outfit', sans-serif;
+	font-weight: 500;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+
+.content-container .text-titl {
+	font-size: 32px;
+	font-weight: bold;
+	color: #05224C;
+}
+
+.content-container .small-text {
+	font-size: 18px;
+	color: #172121;
+}
+
+.content-container .last-text {
+	position: absolute;
+	bottom: 15px;
+	font-size: 14px;
+	color: #92A1B1;
+}
+
+.content-container .button-space button,.content-container .button-space a {
+
+	background-color: #2593F7;
+	color: #fff;
+	font-size: 14px;
+	box-shadow: none;
+}
+
+.content-container .bottom-logo {
+	position: absolute;
+	bottom: -75px;
+	right: 0;
+}
+
+
+/* Media Query */
+@media (max-width: 767px) {
+
+	.main-section .all-box-section {
+		width: 100%;
+	}
+}
