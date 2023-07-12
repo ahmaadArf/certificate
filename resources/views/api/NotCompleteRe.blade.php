@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,14 +9,9 @@
 <body style="background: #eee; font-family: Arial, Helvetica, sans-serif">
 
     <div style="width: 600px; margin: 40px auto; background: #fff; border: 2px solid #d6d6d6; padding: 20px">
-        <h4>Hi {{ $userName }}, I Hope this email find you will</h4>
-        <h5>Register Complete</h5>
-        <p>free Period is start now to 7 Day!</p>
+        <p>Hi {{ $userName }}, I Hope this email find you will</p>
+        <p>Register NOT Complete  Please Go To Setteing And Enter License Number</p>
         <br>
-        <p>To Show Palns with this information:  <a  href="{{ route('plans.index') }}">Click Here</a></p>
-        <p>To Upgrate Your Account:  <a  href="{{ route('plans.index') }}">Click Here</a></p>
-
-
         <p>Best Regards</p>
     </div>
 

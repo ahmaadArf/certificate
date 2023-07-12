@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\ApiLaren;
 
+use App\Models\Plan;
 use App\Models\User;
 use App\Mail\CompaletedRe;
 use Illuminate\Http\Request;
+use App\Mail\NotCompaletedRe;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +15,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ApiLaren\Traits\GeneralTrait;
-use App\Models\Plan;
 
 class AuthController extends Controller
 {
@@ -82,8 +83,10 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'has_vat' => 'required',
+            'company_name' => 'required',
+            'postal_code' => 'required',
             'country_id' => ['exists:countries,id'],
-            'category_id' => ['exists:categories,id'],
+            'category_id' => ['required','exists:categories,id'],
             'electric_board_id' => ['exists:electric_boards,id'],
 
         ]);
@@ -113,24 +116,25 @@ class AuthController extends Controller
         ]);
 
 
-        $flage=false;
-        if( $request->category_id==1&&$user->trading_name && $user->company_name &&$user->registration_number
-         &&$user->registered_address &&$user->number_street_name &&$user->city &&
-         $user->postal_code &&$user->state &&$user->country_id &&
-         $user->vat_number &&$user->has_vat &&$request->license_number&&$request->electric_board_id ){
-            $flage=true;
-        }
-        elseif($request->category_id==2&&$user->trading_name && $user->company_name &&$user->registration_number
-        &&$user->registered_address &&$user->number_street_name &&$user->city &&
-        $user->postal_code &&$user->state &&$user->country_id &&
-        $user->vat_number &&$user->has_vat &&$request->gas_register_number){
-            $flage=true;
+        // $flage=false;
+        // if($request->license_number ){
+        //     $flage=true;
+        // }
+        // elseif($request->category_id==2&&$user->trading_name && $user->company_name &&$user->registration_number
+        // &&$user->registered_address &&$user->number_street_name &&$user->city &&
+        // $user->postal_code &&$user->state &&$user->country_id &&
+        // $user->vat_number &&$user->has_vat &&$request->gas_register_number){
+        //     $flage=true;
 
-        }
+        // }
 
 
-        if(!$flage) return $this->returnData('user',$user ,'Must Fill all data to start the free period!');
-        else{
+        if(!$request->license_number )
+        {
+        Mail::to($user->email)->send(new NotCompaletedRe($user->name));
+         return $this->returnData('user',$user ,'Must Fill all data to start the free period!');
+
+        } else{
             $user->update([
                 'trial_ends_at'=>Carbon::now()->addDay(7)
             ]);
@@ -155,4 +159,4 @@ class AuthController extends Controller
 
 }
 
-//ahmed
+
