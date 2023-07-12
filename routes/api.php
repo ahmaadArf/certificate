@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SignatureController;
 use App\Http\Controllers\ApiLaren\AuthController;
 use App\Http\Controllers\Api\TaxSettingController;
-use App\Http\Controllers\Api\CertificateController;
 use App\Http\Controllers\Api\PaymentTermController;
 use App\Http\Controllers\Api\SiteContactController;
 use App\Http\Controllers\Api\FormTemplateController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\ApiLaren\CountryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\ApiLaren\CategoryController;
+use App\Http\Controllers\ApiLaren\CertificateController;
 use App\Http\Controllers\ApiLaren\BusinessTypeController;
 use App\Http\Controllers\Api\Auth\PasswordResetLinkController;
 
@@ -149,7 +149,16 @@ Route::prefix('apiLaren')->group(function(){
     Route::get('electric-boards', [BusinessTypeController::class, 'electricBoards']);
     Route::get('category/{id}/forms', [CategoryController::class, 'forms']);
 
+
+    Route::prefix('certificates')->middleware('auth:user-api','verified')->group(function () {
+        Route::get('complete', [CertificateController::class, 'completeCertificate']);
+        Route::get('uncompleted', [CertificateController::class, 'uncompletedCertificate']);
+
+    });
+
 });
+
+
 
 //taif test
 
