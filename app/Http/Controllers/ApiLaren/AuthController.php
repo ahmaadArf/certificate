@@ -43,40 +43,40 @@ class AuthController extends Controller
         return $this->returnData('user',$userInf,'User Login!');
     }
 
-    public function register(Request $request) {
+    // public function register(Request $request) {
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string', 'min:8'],
-            'business_type_id' => ['required', 'array'],
-            'phone' => ['required','unique:users'],
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //         'first_name' => ['required', 'string', 'max:255'],
+    //         'last_name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'email', 'max:255'],
+    //         'password' => ['required', 'string', 'min:8'],
+    //         'business_type_id' => ['required', 'array'],
+    //         'phone' => ['required','unique:users'],
+    //     ]);
 
-        if ($validator->fails()) {
-            return $this->returnValidationError($validator->errors(), '',422);
-        }
-        try{
-        $user = User::create([
-            'name'=>$request->first_name.$request->last_name,
-            'first_name'=>$request->first_name,
-            'last_name'=>$request->last_name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password),
-            'phone'=>$request->phone,
-        ]);
-        if (count($request->business_type_id) > 0) {
-            $user->BusinessType()->attach($request->business_type_id);
-        }
-        }catch(\Exception $e){
-            return $this->returnError(400,$e->getMessage());
+    //     if ($validator->fails()) {
+    //         return $this->returnValidationError($validator->errors(), '',422);
+    //     }
+    //     try{
+    //     $user = User::create([
+    //         'name'=>$request->first_name.$request->last_name,
+    //         'first_name'=>$request->first_name,
+    //         'last_name'=>$request->last_name,
+    //         'email'=>$request->email,
+    //         'password'=>Hash::make($request->password),
+    //         'phone'=>$request->phone,
+    //     ]);
+    //     if (count($request->business_type_id) > 0) {
+    //         $user->BusinessType()->attach($request->business_type_id);
+    //     }
+    //     }catch(\Exception $e){
+    //         return $this->returnError(400,$e->getMessage());
 
-        }
-        event(new Registered($user));
+    //     }
+    //     event(new Registered($user));
 
-        return $this->returnData('user',$user,'User Created!');
-    }
+    //     return $this->returnData('user',$user,'User Created!');
+    // }
 
     public function completeRegister(Request $request) {
 
