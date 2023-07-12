@@ -28,7 +28,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->returnValidationError($validator->errors(), '',422);
+            return $this->returnValidationError($validator->errors(), 'You must enter all data',422);
         }
 
         if (! $token = auth('user-api')->attempt($validator->validated())) {
@@ -37,47 +37,51 @@ class AuthController extends Controller
         $user = Auth::guard('user-api')->user();
         $userInf=[
             'name'=>$user->name,
+            'first_name'=>$user->first_name,
+            'last_name'=>$user->last_name,
             'email'=>$user->email,
-            'token'=>$token
+            'email_verified_at'=>$user->email_verified_at,
+            'token'=>$token,
+
         ];
 
         return $this->returnData('user',$userInf,'User Login!');
     }
 
-    // public function register(Request $request) {
+    public function register(Request $request) {
 
-    //     $validator = Validator::make($request->all(), [
-    //         'first_name' => ['required', 'string', 'max:255'],
-    //         'last_name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'email', 'max:255'],
-    //         'password' => ['required', 'string', 'min:8'],
-    //         'business_type_id' => ['required', 'array'],
-    //         'phone' => ['required','unique:users'],
-    //     ]);
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', 'min:8'],
+            'business_type_id' => ['required', 'array'],
+            'phone' => ['required','unique:users'],
+        ]);
 
-    //     if ($validator->fails()) {
-    //         return $this->returnValidationError($validator->errors(), '',422);
-    //     }
-    //     try{
-    //     $user = User::create([
-    //         'name'=>$request->first_name.$request->last_name,
-    //         'first_name'=>$request->first_name,
-    //         'last_name'=>$request->last_name,
-    //         'email'=>$request->email,
-    //         'password'=>Hash::make($request->password),
-    //         'phone'=>$request->phone,
-    //     ]);
-    //     if (count($request->business_type_id) > 0) {
-    //         $user->BusinessType()->attach($request->business_type_id);
-    //     }
-    //     }catch(\Exception $e){
-    //         return $this->returnError(400,$e->getMessage());
+        if ($validator->fails()) {
+            return $this->returnValidationError($validator->errors(),'You must enter all data',422);
+        }
+        try{
+        $user = User::create([
+            'name'=>$request->first_name.$request->last_name,
+            'first_name'=>$request->first_name,
+            'last_name'=>$request->last_name,
+            'email'=>$request->email,
+            'password'=>Hash::make($request->password),
+            'phone'=>$request->phone,
+        ]);
+        if (count($request->business_type_id) > 0) {
+            $user->BusinessType()->attach($request->business_type_id);
+        }
+        }catch(\Exception $e){
+            return $this->returnError(400,$e->getMessage());
 
-    //     }
-    //     event(new Registered($user));
+        }
+        event(new Registered($user));
 
-    //     return $this->returnData('user',$user,'User Created!');
-    // }
+        return $this->returnData('user',$user,'User Created!');
+    }
 
     public function completeRegister(Request $request) {
 
@@ -92,7 +96,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->returnValidationError($validator->errors(), '',422);
+            return $this->returnValidationError($validator->errors(), 'You must enter all data',422);
         }
         $user = User::find(authUser('user-api')->id);
         try{
@@ -115,39 +119,39 @@ class AuthController extends Controller
             'electric_board_id'=>$request->electric_board_id,
         ]);
 
-
-        // $flage=false;
-        // if($request->license_number ){
-        //     $flage=true;
-        // }
-        // elseif($request->category_id==2&&$user->trading_name && $user->company_name &&$user->registration_number
-        // &&$user->registered_address &&$user->number_street_name &&$user->city &&
-        // $user->postal_code &&$user->state &&$user->country_id &&
-        // $user->vat_number &&$user->has_vat &&$request->gas_register_number){
-        //     $flage=true;
-
-        // }
+        if ($request->hasFile('logo')) {
+            $logo = uploadImage($request->logo, 'user_logo');
+            $user->logo()->delete();
+            $user->logo()->create($logo);
+        }
 
 
-        if(!$request->license_number )
+        if($request->category_id==1&&$request->license_number&&$request->electric_board_id )
         {
-        Mail::to($user->email)->send(new NotCompaletedRe($user->name));
-         return $this->returnData('user',$user ,'Must Fill all data to start the free period!');
-
-        } else{
             $user->update([
                 'trial_ends_at'=>Carbon::now()->addDay(7)
             ]);
 
             Mail::to($user->email)->send(new CompaletedRe($user->name));
             return $this->returnData('user',$user,'User Complete Register and free period is start!');
+
+
+        }elseif($request->category_id==2&&$request->gas_register_number){
+
+            $user->update([
+                'trial_ends_at'=>Carbon::now()->addDay(7)
+            ]);
+
+            Mail::to($user->email)->send(new CompaletedRe($user->name));
+            return $this->returnData('user',$user,'User Complete Register and free period is start!');
+
+
+        }
+         else{
+            Mail::to($user->email)->send(new NotCompaletedRe($user->name));
+            return $this->returnData('user',$user ,'Must Fill all data to start the free period!');
         }
 
-        if ($request->hasFile('logo')) {
-            $logo = uploadImage($request->logo, 'user_logo');
-            $user->logo()->delete();
-            $user->logo()->create($logo);
-        }
         }catch(\Exception $e){
             return $this->returnError(400,$e->getMessage());
 

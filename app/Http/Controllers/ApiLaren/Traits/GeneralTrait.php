@@ -40,7 +40,7 @@ trait GeneralTrait
     public function returnValidationError($data= null,$message = null,$status = null){
 
         $array = [
-            'data'=>$data,
+            'errors'=>$data,
             'message'=>$message,
             'status'=>$status,
         ];
