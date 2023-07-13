@@ -148,11 +148,11 @@ Route::prefix('apiLaren')->group(function(){
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('electric-boards', [BusinessTypeController::class, 'electricBoards']);
     Route::get('category/{id}/forms', [CategoryController::class, 'forms']);
-
-
     Route::prefix('certificates')->middleware('auth:user-api','verified')->group(function () {
+        Route::get('/', [CertificateController::class, 'index']);
         Route::get('complete', [CertificateController::class, 'completeCertificate']);
         Route::get('uncompleted', [CertificateController::class, 'uncompletedCertificate']);
+        Route::get('filter/', [CertificateController::class, 'filter']);
 
     });
 
@@ -160,7 +160,6 @@ Route::prefix('apiLaren')->group(function(){
 
 
 
-//taif test
 
 
 
