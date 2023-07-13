@@ -150,9 +150,11 @@ Route::prefix('apiLaren')->group(function(){
     Route::get('category/{id}/forms', [CategoryController::class, 'forms']);
     Route::prefix('certificates')->middleware('auth:user-api','verified')->group(function () {
         Route::get('/', [CertificateController::class, 'index']);
+        Route::get('show/{id}', [CertificateController::class, 'show']);
         Route::get('complete', [CertificateController::class, 'completeCertificate']);
         Route::get('uncompleted', [CertificateController::class, 'uncompletedCertificate']);
-        Route::get('filter/', [CertificateController::class, 'filter']);
+        Route::get('filter', [CertificateController::class, 'filter']);
+        Route::post('create-note/{id}', [CertificateController::class, 'createNote']);
 
     });
 
