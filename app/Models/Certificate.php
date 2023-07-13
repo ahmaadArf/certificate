@@ -26,6 +26,11 @@ class Certificate extends Model
     {
         return $this->belongsTo(Form::class, 'form_id');
     }
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site_id');
+    }
+
 
     public function user()
     {
@@ -45,6 +50,7 @@ class Certificate extends Model
     public function notes(){
         return $this->hasMany(CertificateNote::class,'certificate_id');
     }
+
 
     public function customerSignature()
     {

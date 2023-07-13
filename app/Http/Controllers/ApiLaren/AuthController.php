@@ -35,14 +35,20 @@ class AuthController extends Controller
             return $this->returnError(401,'Unauthorized');
         }
         $user = Auth::guard('user-api')->user();
+        $isComplete=false;
+        if($user->trial_ends_at){
+            $isComplete=True;
+        }
+
         $userInf=[
+            'id'=>$user->id,
             'name'=>$user->name,
             'first_name'=>$user->first_name,
             'last_name'=>$user->last_name,
             'email'=>$user->email,
             'email_verified_at'=>$user->email_verified_at,
             'token'=>$token,
-
+            'isComplete'=>$isComplete
         ];
 
         return $this->returnData('user',$userInf,'User Login!');

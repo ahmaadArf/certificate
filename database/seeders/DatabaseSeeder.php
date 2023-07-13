@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Certificate;
+use App\Models\Customer;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,23 +15,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-           StatusSeeder::class,
-           CountrySeeder::class,
-           BusinessTypeSeeder::class,
-           CustomerTypeSeeder::class,
-           PaymentTermsSeeder::class,
-           FormSeeder::class,
-            TaxSeeder::class,
-            PlanSeeder::class,
-            CategorySeeder::class,
-            ElectricBoardSeeder::class,
-           ]);
+        // $this->call([
+        //    StatusSeeder::class,
+        //    CountrySeeder::class,
+        //    BusinessTypeSeeder::class,
+        //    CustomerTypeSeeder::class,
+        //    PaymentTermsSeeder::class,
+        //    FormSeeder::class,
+        //     TaxSeeder::class,
+        //     PlanSeeder::class,
+        //     CategorySeeder::class,
+        //     ElectricBoardSeeder::class,
+        //    ]);
 
-    //     Certificate::create([
-    //       'id'=>1,
-    //       'site_id'=>1,
-    //       'data'=>'taif',
-    //     ]);
+        Customer::create([
+
+          'name'=>'ahmed',
+          'user_id'=>20
+        ]);
     }
 }
