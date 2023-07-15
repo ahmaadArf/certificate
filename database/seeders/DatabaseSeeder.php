@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
 
         Customer::create([
 
-          'name'=>'ahmed',
-          'user_id'=>20
+          'name'=>'taif',
+          'user_id'=>41
         ]);
     }
 }

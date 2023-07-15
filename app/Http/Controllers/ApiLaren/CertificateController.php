@@ -17,9 +17,10 @@ class CertificateController extends Controller
 
     public function index() {
         $certificates= Certificate::where('user_id',authUser('user-api')->id)->get();
+        $dataResource=CertificatesResource::collection($certificates);
         $data = [
             'count'=>count($certificates),
-            'completeCertificate'=> $certificates
+            'Certificate'=> $dataResource
         ];
         return $this->returnData('data', $data,'All Certificate');
 
@@ -28,9 +29,10 @@ class CertificateController extends Controller
     public function completeCertificate() {
 
         $certificates= Certificate::where('status_id',3)->where('user_id',authUser('user-api')->id)->get();
+        $dataResource=CertificatesResource::collection($certificates);
         $data = [
             'count'=>count($certificates),
-            'completeCertificate'=> $certificates
+            'completeCertificate'=> $dataResource
         ];
         return $this->returnData('data', $data,'Complete Certificate');
     }
@@ -38,9 +40,10 @@ class CertificateController extends Controller
     public function uncompletedCertificate() {
 
         $certificates= Certificate::where('status_id','!=',3)->where('user_id',authUser('user-api')->id)->get();
+        $dataResource=CertificatesResource::collection($certificates);
         $data = [
             'count'=>count($certificates),
-            'uncompletedCertificate'=> $certificates
+            'uncompletedCertificate'=>  $dataResource
         ];
         return $this->returnData('data', $data,'Un Completed Certificate');
 
@@ -54,7 +57,7 @@ class CertificateController extends Controller
         $certificates= Certificate::where('user_id',authUser('user-api')->id)
         ->where('status_id',request()->id)->with(['status', 'customer', 'notes','form', 'site'])->get();
         $data=CertificatesResource::collection($certificates);
-        return $this->returnData('certificates', $data,'Certificate');
+        return $this->returnData('certificates',  $data,'Certificate');
 
     }
 
@@ -63,6 +66,8 @@ class CertificateController extends Controller
         if($certificate){
         $data=new CertificatesResource($certificate);
         return $this->returnData('certificates', $data,'Certificate');
+        }else{
+            return $this->returnError(404,'Certificate Not Found');
         }
 
     }
@@ -76,13 +81,32 @@ class CertificateController extends Controller
         if ($validator->fails()) {
             return $this->returnValidationError($validator->errors(), 'You must enter all data',422);
         }
-        $certificateNote=CertificateNote::create([
-            'user_id'=>authUser('user-api')->id,
-            'body'=>$request->body,
-            'title'=>$request->title,
-            'certificate_id'=>$id
-        ]);
-        return $this->returnData('Certificate Note', $certificateNote,'Certificate Note Added!');
+        try{
+            $certificateNote=CertificateNote::create([
+                'user_id'=>authUser('user-api')->id,
+                'body'=>$request->body,
+                'title'=>$request->title,
+                'certificate_id'=>$id
+            ]);
+            return $this->returnData('Certificate Note', $certificateNote,'Certificate Note Added!');
+
+        }catch(\Exception $e){
+            return $this->returnError(400,$e->getMessage());
+
+        }
+    }
+
+    function allNote($id) {
+        $certificate= Certificate::find($id);
+        if($certificate){
+
+            $certificateNotes= $certificate->notes()->get();
+            return $this->returnData('All Note', $certificateNotes,'All Note Of Certificate!');
+
+        }else{
+            return $this->returnError(404,'Certificate Not Found');
+        }
+
 
     }
 }

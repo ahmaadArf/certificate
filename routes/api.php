@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SettingController;
-use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SignatureController;
 use App\Http\Controllers\ApiLaren\AuthController;
 use App\Http\Controllers\Api\TaxSettingController;
@@ -19,6 +18,7 @@ use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\ApiLaren\CountryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\ApiLaren\CategoryController;
+use App\Http\Controllers\ApiLaren\CustomerController;
 use App\Http\Controllers\ApiLaren\CertificateController;
 use App\Http\Controllers\ApiLaren\BusinessTypeController;
 use App\Http\Controllers\Api\Auth\PasswordResetLinkController;
@@ -148,6 +148,8 @@ Route::prefix('apiLaren')->group(function(){
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('electric-boards', [BusinessTypeController::class, 'electricBoards']);
     Route::get('category/{id}/forms', [CategoryController::class, 'forms']);
+
+    // certificate routes
     Route::prefix('certificates')->middleware('auth:user-api','verified')->group(function () {
         Route::get('/', [CertificateController::class, 'index']);
         Route::get('show/{id}', [CertificateController::class, 'show']);
@@ -155,6 +157,13 @@ Route::prefix('apiLaren')->group(function(){
         Route::get('uncompleted', [CertificateController::class, 'uncompletedCertificate']);
         Route::get('filter', [CertificateController::class, 'filter']);
         Route::post('create-note/{id}', [CertificateController::class, 'createNote']);
+        Route::get('notes/{id}', [CertificateController::class, 'allNote']);
+    });
+
+     // customer routes
+    Route::prefix('customers')->middleware('auth:user-api','verified')->group(function () {
+        Route::get('/', [CustomerController::class, 'index']);
+        Route::post('create', [CustomerController::class, 'create']);
 
     });
 
