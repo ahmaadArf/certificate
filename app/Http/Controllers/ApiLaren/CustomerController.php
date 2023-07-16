@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\ApiLaren;
 
+use App\Models\Site;
+use App\Models\Contact;
 use App\Models\Customer;
+use App\Models\SiteContact;
 use Illuminate\Http\Request;
 use App\Http\Resources\CustomerRes;
 use App\Http\Controllers\Controller;
@@ -54,8 +57,79 @@ class CustomerController extends Controller
                 'state'=>$request->state,
                 'user_id'=>Auth::guard('user-api')->user()->id,
             ]);
+
+
+
+            $customerContact=Contact::create([
+                'user_id'=>Auth::guard('user-api')->user()->id,
+                'customer_id'=> $customer->id,
+                'f_name'=>$request->first_name .' '.$request->last_name.' '.$request->name,
+                'phone'=>$request->phone,
+                'type'=>$request->type,
+                'email'=>$request->email
+            ]);
+
+            if ($request->copy_site_address == 'yes') {
+               $site= Site::create([
+                    "name" => $request->site_name,
+                    "address" => $request->address,
+                    "street_num" => $request->street_num,
+                    "city" => $request->city,
+                    "state"=>$request->state,
+                    "postal_code" => $request->postal_code,
+                    "country_id" => $request->country_id,
+                    "property_type"=>$request->property_type,
+                    "other_value"=>$request->other_value,
+                    "user_id" => Auth::guard('user-api')->user()->id,
+                    'customer_id'=> $customer->id,
+
+                ]);
+
+            }else{
+                $site= Site::create([
+                    "name" => $request->site_name,
+                    "address" => $request->site_address,
+                    "street_num" => $request->site_street_num,
+                    "city" => $request->site_city,
+                    "state"=>$request->site_state,
+                    "postal_code" => $request->site_postal_code,
+                    "country_id" => $request->site_country_id,
+                    "property_type"=>$request->property_type,
+                    "other_value"=>$request->other_value,
+                    "user_id" => Auth::guard('user-api')->user()->id,
+
+                ]);
+
+            }
+            if ($request->copy_contact == 'yes') {
+                SiteContact::create([
+                    'customer_id' =>$customer->id,
+                    'site_id' =>$site->id,
+                    'user_id' =>authUser('user-api')->id,
+                    'f_name' =>$customerContact->f_name,
+                    'phone' =>$customerContact->phone,
+                    'email' =>$customerContact->email,
+                    'type' =>$customerContact->type,
+                ]);
+            }else{
+                SiteContact::create([
+                    'customer_id' =>$customer->id,
+                    'site_id' =>$site->id,
+                    'user_id' =>authUser('user-api')->id,
+                    'f_name' =>$request->site_contact_f_name,
+                    'phone' =>$request->site_contact_phone,
+                    'email' =>$request->site_contact_email,
+                    'type' =>$request->site_contact_type,
+                ]);
+
+            }
+
+
+
             $data = new CustomerRes($customer);
             return $this->returnData('data', $data,'Customer Added!');
+
+
         }catch(\Exception $e){
             return $this->returnError(400,$e->getMessage());
 

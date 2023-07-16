@@ -3,13 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\SiteController;
 use App\Http\Controllers\Api\StatusController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SignatureController;
 use App\Http\Controllers\ApiLaren\AuthController;
+use App\Http\Controllers\ApiLaren\SiteController;
 use App\Http\Controllers\Api\TaxSettingController;
 use App\Http\Controllers\Api\PaymentTermController;
 use App\Http\Controllers\Api\SiteContactController;
@@ -164,6 +164,11 @@ Route::prefix('apiLaren')->group(function(){
     Route::prefix('customers')->middleware('auth:user-api','verified')->group(function () {
         Route::get('/', [CustomerController::class, 'index']);
         Route::post('create', [CustomerController::class, 'create']);
+
+    });
+
+    Route::prefix('site')->middleware('auth:user-api','verified')->group(function () {
+        Route::post('create', [SiteController::class, 'create']);
 
     });
 
