@@ -15,14 +15,6 @@ class completeRegisterRes extends JsonResource
     public function toArray($request)
     {
         return [
-            // 'category_id' => [
-            //     'id'=>$this->categories->id,
-            //     'name'=>$this->categories->name,
-            // ],
-            // 'electric_board_id' => [
-            //     'id'=>$this->categories->id,
-            //     'name'=>$this->categories->name,
-            // ],
             'trading_name' => $this->trading_name,
             'company_name' => $this->company_name,
             'registration_number' => $this->registration_number,
@@ -31,12 +23,14 @@ class completeRegisterRes extends JsonResource
             'city' => $this->city,
             'postal_code' => $this->postal_code,
             'state'=>$this->state,
-            'country_id' => $this->country_id,
+            'country' =>[
+                'id'=> $this->country->id,
+                'name'=> $this->country->name,
+
+            ],
             'vat_number' => $this->vat_number,
             'has_vat' => $this->has_vat,
-
-            // 'license_number'=>$this->categories->license_number,
-            // 'gas_register_number'=>$this->categories->gas_register_number,
+            'category' => $this->categories,
         ];
     }
 }
