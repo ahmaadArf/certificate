@@ -138,4 +138,14 @@ class CustomerController extends Controller
         }
 
     }
+
+    function show($id) {
+        $customer= Customer::find($id);
+        if($customer){
+            $data = new CustomerRes($customer);
+            return $this->returnData('Customer', $data,'Customer Inf');
+        }else{
+            return $this->returnError(404,'Customer Not Found');
+        }
+    }
 }

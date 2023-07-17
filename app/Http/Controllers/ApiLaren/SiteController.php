@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiLaren\Traits\GeneralTrait;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SiteRes;
 use App\Models\Customer;
 use App\Models\SiteContact;
 use Illuminate\Support\Facades\Auth;
@@ -55,8 +56,8 @@ class SiteController extends Controller
 
         }
 
-
-        return $this->returnData('data', $site,'Site Added!');
+        $data=new SiteRes($site);
+        return $this->returnData('data', $data,'Site Added!');
 
 
     }

@@ -23,7 +23,7 @@ class Site extends Model
         return $this->hasOne(SiteContact::class);
     }
 
-    
+
     public function customer()
     {
         return $this->belongsTo(Customer::class);

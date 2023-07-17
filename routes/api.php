@@ -164,6 +164,7 @@ Route::prefix('apiLaren')->group(function(){
     Route::prefix('customers')->middleware('auth:user-api','verified')->group(function () {
         Route::get('/', [CustomerController::class, 'index']);
         Route::post('create', [CustomerController::class, 'create']);
+        Route::get('show/{id}', [CustomerController::class, 'show']);
 
     });
 
