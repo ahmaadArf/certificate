@@ -6,6 +6,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CustomerRes extends JsonResource
 {
+    function contacts() {
+        $data=[];
+       foreach($this->contacts as $contact){
+        $data[$contact->id]['f_name']=$contact->f_name;
+        $data[$contact->id]['phone']=$contact->phone;
+        $data[$contact->id]['email']=$contact->email;
+        $data[$contact->id]['type']=$contact->type;
+        $data[$contact->id]['customer_id']=$contact->customer_id;
+       };
+       return $data;
+
+    }
     /**
      * Transform the resource into an array.
      *
@@ -33,6 +45,7 @@ class CustomerRes extends JsonResource
                 'name'=>$this->country->name,
             ],
             'user_id' => $this->user_id,
+            'contacts'=>$this->contacts?$this->contacts():'',
         ];
     }
 }

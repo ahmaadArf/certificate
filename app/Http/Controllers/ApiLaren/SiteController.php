@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class SiteController extends Controller
 {
     use GeneralTrait;
+
     public function create(Request $request) {
         $site=Site::create([
             'name'=>$request->name,

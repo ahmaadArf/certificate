@@ -72,6 +72,7 @@ class CustomerController extends Controller
             if ($request->copy_site_address == 'yes') {
                $site= Site::create([
                     "name" => $request->site_name,
+                    // "name" => $customer->site_name,
                     "address" => $request->address,
                     "street_num" => $request->street_num,
                     "city" => $request->city,
@@ -107,6 +108,7 @@ class CustomerController extends Controller
                     'site_id' =>$site->id,
                     'user_id' =>authUser('user-api')->id,
                     'f_name' =>$customerContact->f_name,
+                    // 'f_name' =>$request->f_name,
                     'phone' =>$customerContact->phone,
                     'email' =>$customerContact->email,
                     'type' =>$customerContact->type,

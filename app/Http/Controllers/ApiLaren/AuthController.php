@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\completeRegisterRes;
 use App\Http\Controllers\ApiLaren\Traits\GeneralTrait;
 
 class AuthController extends Controller
@@ -131,6 +132,7 @@ class AuthController extends Controller
             $user->logo()->create($logo);
         }
 
+        $data=new completeRegisterRes( $user);
 
         if($request->category_id==1&&$request->license_number&&$request->electric_board_id )
         {
@@ -139,7 +141,7 @@ class AuthController extends Controller
             ]);
 
             Mail::to($user->email)->send(new CompaletedRe($user->name));
-            return $this->returnData('user',$user,'User Complete Register and free period is start!');
+            return $this->returnData('user',$data,'User Complete Register and free period is start!');
 
 
         }elseif($request->category_id==2&&$request->gas_register_number){
@@ -149,13 +151,13 @@ class AuthController extends Controller
             ]);
 
             Mail::to($user->email)->send(new CompaletedRe($user->name));
-            return $this->returnData('user',$user,'User Complete Register and free period is start!');
+            return $this->returnData('user',$data,'User Complete Register and free period is start!');
 
 
         }
          else{
             Mail::to($user->email)->send(new NotCompaletedRe($user->name));
-            return $this->returnData('user',$user ,'Must Fill all data to start the free period!');
+            return $this->returnData('user',$data ,'Must Fill all data to start the free period!');
         }
 
         }catch(\Exception $e){
