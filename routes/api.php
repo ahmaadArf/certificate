@@ -11,8 +11,10 @@ use App\Http\Controllers\Api\SignatureController;
 use App\Http\Controllers\ApiLaren\AuthController;
 use App\Http\Controllers\ApiLaren\SiteController;
 use App\Http\Controllers\Api\TaxSettingController;
+use App\Http\Controllers\ApiLaren\PlansController;
 use App\Http\Controllers\Api\PaymentTermController;
 use App\Http\Controllers\Api\SiteContactController;
+use App\Http\Controllers\ApiLaren\PlanesController;
 use App\Http\Controllers\Api\FormTemplateController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\ApiLaren\CountryController;
@@ -170,6 +172,12 @@ Route::prefix('apiLaren')->group(function(){
 
     Route::prefix('site')->middleware('auth:user-api','verified')->group(function () {
         Route::post('create', [SiteController::class, 'create']);
+
+    });
+    Route::prefix('/')->middleware('auth:user-api','verified')->group(function () {
+        Route::get('monthly-plans', [PlansController::class, 'monthlyPlans']);
+        Route::get('yearly-plans', [PlansController::class, 'yearlyPlans']);
+        Route::get('show-plans/{id}', [PlansController::class, 'show']);
 
     });
 

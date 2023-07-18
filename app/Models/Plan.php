@@ -12,7 +12,7 @@ class Plan extends Model
         'name',
         'stripe_plan',
         'price',
-       
+
     ];
     protected $nullable=[ 'description'];
     public function features(){
