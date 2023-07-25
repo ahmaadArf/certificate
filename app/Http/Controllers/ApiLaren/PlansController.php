@@ -29,8 +29,14 @@ class PlansController extends Controller
     public function show($id) {
         $plan=Plan::find($id);
         $data=new PlanRes($plan);
-        // return $this->returnData('Plan',$plan->features->first()->name,'Plane informations');
         return $this->returnData('Plan',$data,'Plane informations');
+
+    }
+    public function allPlan() {
+        $plan=Plan::all();
+        $data=PlanRes::collection($plan);
+        return $this->returnData('Plan',$data,'Plane informations');
+
 
     }
 
