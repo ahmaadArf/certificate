@@ -178,6 +178,7 @@ Route::prefix('apiLaren')->group(function(){
         Route::get('monthly-plans', [PlansController::class, 'monthlyPlans']);
         Route::get('yearly-plans', [PlansController::class, 'yearlyPlans']);
         Route::get('show-plans/{id}', [PlansController::class, 'show']);
+        Route::get('plans', [PlansController::class, 'allPlan']);
 
     });
 
