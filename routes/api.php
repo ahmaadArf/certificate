@@ -10,19 +10,20 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SignatureController;
 use App\Http\Controllers\ApiLaren\AuthController;
 use App\Http\Controllers\ApiLaren\SiteController;
+use App\Http\Controllers\ApiLaren\UserController;
 use App\Http\Controllers\Api\TaxSettingController;
 use App\Http\Controllers\ApiLaren\PlansController;
 use App\Http\Controllers\Api\PaymentTermController;
 use App\Http\Controllers\Api\SiteContactController;
 use App\Http\Controllers\ApiLaren\PlanesController;
 use App\Http\Controllers\Api\FormTemplateController;
-use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\ApiLaren\CountryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\ApiLaren\CategoryController;
 use App\Http\Controllers\ApiLaren\CustomerController;
 use App\Http\Controllers\ApiLaren\CertificateController;
 use App\Http\Controllers\ApiLaren\BusinessTypeController;
+use App\Http\Controllers\ApiLaren\SubscriptionController;
 use App\Http\Controllers\Api\Auth\PasswordResetLinkController;
 
 /*
@@ -179,9 +180,18 @@ Route::prefix('apiLaren')->group(function(){
         Route::get('yearly-plans', [PlansController::class, 'yearlyPlans']);
         Route::get('show-plans/{id}', [PlansController::class, 'show']);
         Route::get('plans', [PlansController::class, 'allPlan']);
+        Route::post('subscriptions', [SubscriptionController::class, 'Subscription']);
 
     });
 
+    Route::prefix('user')->middleware('auth:user-api','verified')->group(function () {
+        Route::get('profile', [UserController::class, 'profile']);
+        Route::post('update-address', [UserController::class, 'updateAddress']);
+        Route::post('update-personal', [UserController::class, 'updatePersonal']);
+        Route::post('update-password', [UserController::class, 'updatePassword']);
+        Route::post('update-logo', [UserController::class, 'updateLogo']);
+
+    });
 });
 
 
