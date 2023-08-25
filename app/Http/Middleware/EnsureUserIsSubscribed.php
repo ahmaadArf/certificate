@@ -19,7 +19,10 @@ class EnsureUserIsSubscribed
     {
         $max_certificate = 20;
         $user = Auth::user();
+
+
         if ($user && (!$user->onTrial() || $user->certificate()->count() > $max_certificate)) {
+
             if (!$user->subscribed()) {
                 if ($request->wantsJson()) {
                     return responseJson(false, 'Please subscribe to access this feature.');

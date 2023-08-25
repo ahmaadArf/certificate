@@ -173,6 +173,7 @@ Route::prefix('apiLaren')->group(function(){
 
     Route::prefix('site')->middleware('auth:user-api','verified')->group(function () {
         Route::post('create', [SiteController::class, 'create']);
+        Route::post('update/{id}', [SiteController::class, 'update']);
 
     });
     Route::prefix('/')->middleware('auth:user-api','verified')->group(function () {
@@ -181,6 +182,8 @@ Route::prefix('apiLaren')->group(function(){
         Route::get('show-plans/{id}', [PlansController::class, 'show']);
         Route::get('plans', [PlansController::class, 'allPlan']);
         Route::post('subscriptions', [SubscriptionController::class, 'Subscription']);
+        Route::post('/cancel',[SubscriptionController::class, 'cancel'] );
+
 
     });
 

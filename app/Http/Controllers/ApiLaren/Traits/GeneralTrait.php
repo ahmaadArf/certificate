@@ -3,8 +3,6 @@ namespace App\Http\Controllers\ApiLaren\Traits;
 
 trait GeneralTrait
 {
-
-
     public function returnError($errNum, $msg)
     {
         return response()->json([
@@ -13,7 +11,6 @@ trait GeneralTrait
             'msg' => $msg
         ]);
     }
-
 
     public function returnSuccessMessage($msg = "", $errNum = "S000")
     {
@@ -28,15 +25,12 @@ trait GeneralTrait
     {
         return response()->json([
             'status' => true,
-            'errNum' => "S000",
+            'errNum' => "200",
             'msg' => $msg,
             $key => $value
 
         ]);
     }
-
-
-    //////////////////
     public function returnValidationError($data= null,$message = null,$status = null){
 
         $array = [
@@ -48,8 +42,6 @@ trait GeneralTrait
         return response($array,$status);
 
     }
-
-
     public function returnCodeAccordingToInput($validator)
     {
         $inputs = array_keys($validator->errors()->toArray());
