@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\ApiLaren;
 
-use App\Http\Controllers\ApiLaren\Traits\GeneralTrait;
 use App\Models\Site;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\SiteRes;
 use App\Models\Customer;
 use App\Models\SiteContact;
+use Illuminate\Http\Request;
+use App\Http\Resources\SiteRes;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ApiLaren\Traits\GeneralTrait;
 
 class SiteController extends Controller
 {
@@ -61,4 +62,36 @@ class SiteController extends Controller
 
 
     }
+
+    public function update(Request $request,$id) {
+
+    $site=Site::where('user_id',authUser('user-api')->id)
+    ->where('customer_id',$request->customer_id)->where('id',$id)->first();
+    if($site){
+
+        $site->update([
+            'name'=>$request->name,
+            "postal_code" => $request->postal_code,
+            "street_num" => $request->street_num,
+            "city" => $request->city,
+        ]);
+        $site->siteContact()->update([
+            'f_name' =>$request->firstName.' '.$request->lastName,
+            'phone' =>$request->phone,
+            'email' =>$request->email,
+        ]);
+
+        $data=new SiteRes($site);
+        return $this->returnData('data', $data,'Site Added!');
+
+
+    }else{
+        return $this->returnError(404,'site not found');
+    }
+
+    }
+
 }
+
+
+

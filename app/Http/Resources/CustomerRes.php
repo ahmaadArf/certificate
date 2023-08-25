@@ -18,6 +18,18 @@ class CustomerRes extends JsonResource
        return $data;
 
     }
+    function sites() {
+        $data=[];
+       foreach($this->sites as $site){
+        $data[$site->id]['f_name']=$site->f_name;
+        $data[$site->id]['phone']=$site->phone;
+        $data[$site->id]['email']=$site->email;
+        $data[$site->id]['type']=$site->type;
+        $data[$site->id]['customer_id']=$site->customer_id;
+       };
+       return $data;
+
+    }
     /**
      * Transform the resource into an array.
      *
@@ -46,6 +58,7 @@ class CustomerRes extends JsonResource
             ],
             'user_id' => $this->user_id,
             'contacts'=>$this->contacts?$this->contacts():'',
+            'sites'=>$this->sites?$this->sites():'',
         ];
     }
 }
